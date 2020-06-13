@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P7_with_Chartjs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+      let people;
+      drawChart();
+      async function drawChart() {
+        await getData();
+
+        const creditCards = people.reduce((r, a) => {
+          r[a.CreditCardType] = r[a.CreditCardType] || [];
+          r[a.CreditCardType].push(a);
+          return r;
+        }, Object.create(null));
+        console.log(creditCards);
+
+        const creditCardLabels = Object.keys(creditCards).map((item) => item);
+        const creditCardValues = Object.keys(creditCards).map(
+          (item) => item.length
+        );
+
+        const genders = people.reduce((r, a) => {
+          r[a.gender] = r[a.gender] || [];
+          r[a.gender].push(a);
+          return r;
+        }, Object.create(null));
+        console.log(genders);
+
+        const genderLabels = Object.keys(genders).map((item) => item);
+        const genderValues = Object.keys(genders).map((item) => item.length);
+
+        const data = {
+          labels: creditCardLabels,
+          datasets: [
+            {
+              label: "Cantidad de clientes por tarjeta de debito",
+              data: creditCardValues,
+              backgroundColor: [
+                "#F74B27",
+                "#5A5E17",
+                "#1E7B5A",
+                "#33DADC",
+                "#1B75EC",
+                "#1D2938",
+                "#7165CE",
+                "#A665CE",
+                "#A665CE",
+                "#7C0B62",
+                "#FE0396",
+                "##D12525",
+                "#9b59b6",
+                "#34495e",
+                "#f1c40f",
+                "#e67e22",
+                "#e74c3c",
+                "#95a5a6",
+                "#34495e",
+                "#2ecc71",
+                "#3498db",
+                "#9b59b6",
+                "#34495e",
+                "#f1c40f",
+                "#e67e22",
+                "#e74c3c",
+                "#95a5a6",
+              ],
+            },
+          ],
+        };
+
+        const data2 = {
+          labels: genderLabels,
+          datasets: [
+            {
+              label: "Cantidad de clientes por tarjeta de debito",
+              data: genderValues,
+              backgroundColor: [
+                "#F74B27",
+                "#5A5E17",
+                "#1E7B5A",
+                "#33DADC",
+                "#1B75EC",
+                "#1D2938",
+                "#7165CE",
+                "#A665CE",
+                "#A665CE",
+                "#7C0B62",
+                "#FE0396",
+                "##D12525",
+                "#3498db",
+                "#9b59b6",
+                "#34495e",
+                "#f1c40f",
+                "#e67e22",
+                "#e74c3c",
+                "#95a5a6",
+                "#1abc9c",
+                "#2ecc71",
+                "#3498db",
+                "#9b59b6",
+                "#34495e",
+                "#f1c40f",
+                "#e67e22",
+                "#e74c3c",
+                "#95a5a6",
+              ],
+            },
+          ],
+        };
+
+        const options = {
+          responsive: false,
+        };
+
+        const ctx = document.getElementById("chart1").getContext("2d");
+        const chart1 = new Chart(ctx, {
+          type: "bar",
+          data: data,
+          options: options,
+        });
+
+        const ctx2 = document.getElementById("chart2").getContext("2d");
+        const myDoughnutChart = new Chart(ctx2, {
+          type: "pie",
+          data: data,
+          options: options,
+        });
+
+        const ctx3 = document.getElementById("chart3").getContext("2d");
+        const myBubbleChart = new Chart(ctx3, {
+          data: data2,
+          type: "doughnut",
+          options: options,
+        });
+
+        const ctx4 = document.getElementById("chart4").getContext("2d");
+        const myPieChart = new Chart(ctx4, {
+          type: "pie",
+          data: data2,
+          options: options,
+        });
+      }
+
+      async function getData() {
+        const response = await fetch("./data/people.json");
+        const data = await response.json();
+        people = data;
+      }
+    </script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <div class="grid">
+      <h1>Cantidad de usuarios con una tarjeta de debito por sexo</h1>
+      <h2>
+        <canvas id="chart3" class="content" width="500" height="500"></canvas>
+      </h2>
+
+      <h1>Numero de usuarios por tarjeta de debito</h1>
+      <canvas id="chart1" class="canvas" width="500" height="500"></canvas>
+      <canvas id="chart2" class="canvas" width="500" height="500"></canvas>
+    </div>
+  </body>
+</html>
